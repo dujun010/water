@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jmsd.student.mapper.StudentMapper">
+    <!-- ======================================= 列值 ============================================== -->
+    <sql id="Base_Column_List">
+        ID AS id,NAME AS name,AGE as age
+	</sql>
+    
+    <!-- = 分页查询全部  = --> 
+    <select id="queryListByPageFully" resultType="com.jmsd.student.pojo.Student">
+    	SELECT <include refid="Base_Column_List"/> FROM student
+    </select>
+</mapper>
+
