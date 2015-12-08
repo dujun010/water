@@ -47,7 +47,7 @@ public class StudentController {
 		int start = (intPage-1) * intPageSize;//
 		
 		//SQL
-		String sqlCon = " 1=1 ";
+		String sqlCon = "";
 		
 		//排序
 		List<SortField> sortFields = Lists.newArrayList();

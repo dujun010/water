@@ -7,7 +7,7 @@
 	</sql>
     
      <!-- ================================= 分页查询全部  ============================================= -->
-    <select id="findAll" resultType="com.jmsd.teacher.pojo.Teacher">
+    <select id="queryListByPageFully" resultType="com.jmsd.teacher.pojo.Teacher">
     	SELECT  <include refid="Base_Column_List"/> FROM teacher
     </select>
     

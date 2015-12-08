@@ -1,7 +1,7 @@
 package com.jmsd.teacher.service.impl;
 
-import java.util.List;
-
+import org.mybatis.pagination.dto.PageMyBatis;
+import org.mybatis.pagination.dto.datatables.PagingCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +15,10 @@ public class TeacherServiceImpl implements TeacherService {
 	private TeacherMapper mapper;
 
 	@Override
-	public List<Teacher> findAll() {
+	public PageMyBatis<Teacher> queryListByPageFully(
+			PagingCriteria pagingCriteria) {
 		// TODO Auto-generated method stub
-		return mapper.findAll();
+		return mapper.queryListByPageFully(pagingCriteria);
 	}
 	
 }

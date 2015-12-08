@@ -36,7 +36,13 @@
 		    	end = $pageInfo.currentPage + 5 <=$pageInfo.pageCount ? $pageInfo.currentPage + 5 : $pageInfo.pageCount;
 		    }
 		    
-		    if($pageInfo.currentPage == 0 || $pageInfo.currentPage == 1){
+		    
+		    if($pageInfo.totalCount <= $pageInfo.PageSize){//总条数     <= 每页条数
+		    	$pageStyle.styleLaquo_='disabled';//首页样式
+		    	$pageStyle.styleLt_ = 'disabled';//上一页样式
+		    	$pageStyle.styleRaquo_='disabled';//尾页样式
+		    	$pageStyle.styleGt_ = 'disabled'//下一页样式
+		    }else if($pageInfo.currentPage == 0 || $pageInfo.currentPage == 1){
 		    	$pageStyle.styleLaquo_='disabled';//首页样式
 		    	$pageStyle.styleLt_ = 'disabled';//上一页样式
 		    }else if($pageInfo.currentPage == $pageInfo.pageCount){
@@ -61,22 +67,18 @@
 		    
 		    //绑定数据处理函数
 		    $this.find("ul li[class=\'laquo\'] a").bind("click",function(){//首页
-		    	alert('up');
 		    	redirectTo(1);
 		    });
 		    $this.find("ul li[class=\'lt\'] a").bind("click",function(){//上一页
-		    	alert('up');
 		    	redirectTo($pageInfo.currentPage-1);
 		    });
 		    $this.find("ul li[class=\'nomal\'] a").bind("click",function(){
 		    	redirectTo($(this).html());
 		    });
 		    $this.find("ul li[class=\'gt\'] a").bind("click",function(){//下一页
-		    	alert('xia');
 		    	redirectTo($pageInfo.currentPage+1);
 		    });
 		    $this.find("ul li[class=\'raquo\'] a").bind("click",function(){//尾页
-		    	alert('xia');
 		    	redirectTo($pageInfo.currentPage==0 ? $pageInfo.currentPage+2 : $pageInfo.currentPage+1);
 		    });
 		    
@@ -96,8 +98,6 @@
 	            $("form[name='"+form+"']").attr("action",url);
 	            $("form[name='"+form+"']").submit();
 		    }
-		    
-		    
 		    
 			return $this;
 		}

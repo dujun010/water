@@ -92,6 +92,7 @@
     -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.jmsd.student.mapper,com.jmsd.teacher.mapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
     </bean>
     
 	

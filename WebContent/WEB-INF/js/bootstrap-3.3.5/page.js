@@ -1,100 +1,175 @@
-(function($){
-	var Page = function(){
-		
-		var $pageElement = $('div[class=\'panelBar\']');
-		var $totalCount = $pageElement.attr('totalCount')*1;//总条数
-		var $PageSize = $pageElement.attr('numPerPage')*1;//每页条数
-		var $currentPage = 9;//$pageElement.attr("currentPage")*1; // 当前页码
-		var $pageCount = 20;//(($totalCount*1)/($PageSize*1))%2 == 0 ? (($totalCount*1)/($PageSize*1)) : parseInt((($totalCount*1)/($PageSize*1))+1);//总页码
-		var $styleLaquo_ = 'laquo';//上一页样式
-		var $styleRaquo_ = 'raquo';//下一页样式
-		
-		//创建页面分页按钮
-		Page.prototype.CreatPageButton = function(){
-			
-			//分页数字按钮
-			var buttonPageNumber = createButtonNumber();
-			if(buttonPageNumber.length == 1){//只有一页时    首页  尾页都禁用
-				$styleLaquo_ = 'disabled';
-				$styleRaquo_ = 'disabled';
+$(document).ready(
+		function() {
+			var $pageInfo={
+		    		url : $("form[name='searchForm']").attr("action"),//$this.context.baseURI,
+		    		totalCount : $(this).attr("totalCount")*1,//总条数
+		    		currentPage : $(this).attr("currentPage")*1, // 当前页码
+		    		PageSize : $(this).attr('numPerPage')*1,//每页条数
+		    		pageCount : (($(this).attr("totalCount")*1)/($(this).attr('numPerPage')*1))%2 == 0 ? 
+		    				(($(this).attr("totalCount"))/($(this).attr('numPerPage')*1)) : parseInt((($(this).attr("totalCount")*1)/($(this).attr('numPerPage')*1))+1),//总页码
+		             
+		    };
+			var pagesMax = $pageInfo.pageCount;
+			var pagesMin = 1;
+			var startPage = $pageInfo.currentPage;
+			var url = $pageInfo.url;
+
+			$('.pagination .pageSlider').slider({
+
+				value : startPage,
+				max : pagesMax,
+				min : pagesMin,
+				animate : true,
+
+				create : function(event, ui) {
+
+					$('.pagination .pageSlider .ui-slider-handle').attr({
+						"aria-valuenow" : startPage,
+						"aria-valuetext" : "Page " + startPage,
+						"role" : "slider",
+						"aria-valuemin" : pagesMin,
+						"aria-valuemax" : pagesMax,
+						"aria-describedby" : "pageSliderDescription"
+					});
+
+					$('.pagination .pageInput').val(startPage);
+
+				}
+
+			}).on('slide', function(event, ui) {
+
+				// let user skip 10 pages with keyboard ;)
+				if (event.metaKey || event.ctrlKey) {
+
+					if (ui.value > $(this).slider('value')) {
+
+						if (ui.value + 9 < pagesMax) {
+							ui.value += 9;
+						} else {
+							ui.value = pagesMax
+						}
+						$(this).slider('value', ui.value);
+
+					} else {
+
+						if (ui.value - 9 > pagesMin) {
+							ui.value -= 9;
+						} else {
+							ui.value = pagesMin
+						}
+						$(this).slider('value', ui.value);
+
+					}
+
+					event.preventDefault();
+
+				}
+
+				$('.pagination .pageNumber span').text(ui.value);
+				$('.pagination .pageInput').val(ui.value);
+
+			}).on(
+					'slidechange',
+					function(event, ui) {
+
+						$('.pagination .pageNumber').attr('role', 'alert')
+								.find('span').text(ui.value);
+
+						$('.pagination .pageInput').val(ui.value);
+
+						$('.pagination .pageSlider .ui-slider-handle').attr({
+							"aria-valuenow" : ui.value,
+							"aria-valuetext" : "Page " + ui.value
+						});
+
+					});
+
+			$('.pagination .pageSlider .ui-slider-handle').on(
+					'keyup',
+					function(e) {
+
+						if (e.which == 13) {
+							var curPage = $('.pagination .pageSlider').slider(
+									'value');
+							alert('we would now send you to: '
+									+ url.replace(/{{.}}/, curPage));
+						}
+
+					});
+
+			$('.pagination .pageInput').on('change', function(e) {
+				$('.pagination .pageSlider').slider('value', $(this).val());
+			});
+
+			var tmr;
+			$('.pageSkip').on(
+					'click',
+					function(e) {
+
+						e.preventDefault();
+
+						var $this = $(this);
+
+						if ($this.hasClass('pageNext')) {
+							var curPage = $('.pagination .pageSlider').slider(
+									'value') + 1;
+						} else if ($this.hasClass('pagePrev')) {
+							var curPage = $('.pagination .pageSlider').slider(
+									'value') - 1;
+						}
+
+						$('.pagination .pageSlider').slider('value', curPage);
+
+						clearTimeout(tmr);
+						tmr = setTimeout(function() {
+							alert('we would now send you to: '
+									+ url.replace(/{{.}}/, curPage));
+						}, 1000);
+
+					});
+
+			function sliderPips(min, max) {
+
+				var pips = max - min;
+				var $pagination = $('.pagination .pageSlider');
+
+				for (i = 0; i <= pips; i++) {
+
+					var s = $('<span class="pagePip"/>').css({
+						left : '' + (100 / pips) * i + '%'
+					});
+
+					$pagination.append(s);
+
+				}
+
+				var minPip = $('<span class="pageMinPip">' + min + '</span>');
+				var maxPip = $('<span class="pageMaxPip">' + max + '</span>');
+				$pagination.prepend(minPip, maxPip);
+
 			}
-			if($currentPage == 1)//第一页  禁用《
-				$styleLaquo_ = 'disabled';
-			
-			if($currentPage == $pageCount) //最后一页  禁用 》
-				$styleRaquo_ = 'disabled';
-			
-			var $html = new Array();
-			$html.push('<ul class="pagination">');
-			$html.push('<li class="'+$styleLaquo_+'"><a href="javascript:void(0)">&laquo;</a></li>');
-			
-			$html.push(buttonPageNumber.join(""));
-			
-			$html.push('<li class="'+$styleRaquo_+'"><a href="javascript:void(0)">&raquo;</a></li>');
-			$html.push('</ul>');
-			
-			return $html;
-		};
-		
-		//构建分页数字按钮
-		var createButtonNumber = function(){
-			
-			var $buttonNumber = new Array();
-			
-			//总条数  <= 每页个数      ||  总条数 ==0
-			if($totalCount <= $PageSize || $totalCount==0 ){
-				$buttonNumber.push('<li class="active"><a href="javascript:void(0)">'+1+'</a></li>')
-				return $buttonNumber;
+			;
+			sliderPips(pagesMin, pagesMax);
+
+			function sliderLabel() {
+				$('.pagination .ui-slider-handle').append(
+						'<span class="pageNumber">Page <span>'
+								+ $('.pagination .pageSlider').slider('value')
+								+ '</span></span>');
 			}
-			
-			var $styleButtonNmuber_ = '';//数字页码样式
-			var page10 = $pageCount;// 总页码：30  当前页：8
-			var n = 1;
-			if(page10 > 10){
-				n = $currentPage <= 5 ? n :  $currentPage - 5;//前五
-				page10 = $pageCount >= $currentPage + 5 ? $currentPage + 5 : $pageCount;//后五
-			}
-			
-			for(var i = n; i <= page10 ; i++){
-				$styleButtonNmuber_ = $currentPage == i ? ' class="active"':' class="nomal"';
-				$buttonNumber.push('<li'+$styleButtonNmuber_+'><a href="javascript:void(0)">'+i+'</a></li>');
-			}
-			return $buttonNumber;
-		};
-	};
-	
-	//构建分页按钮事件
-	var PageButtonOnclik = function(){
-		
-		var url = $("form[name='myForm']").attr("action",url);
-//		alert(url);
-		
-		//上一页
-		$(".panelBar ul li[class=\'laquo\'] a").bind("click",function(){
-			alert('up');
+			;
+			sliderLabel();
+
+			$('.pagination .pageButton').on(
+					'click',
+					function(e) {
+
+						e.preventDefault();
+						var curPage = $('.pagination .pageSlider').slider(
+								'value');
+						alert('we would now send you to: '
+								+ url.replace(/{{.}}/, curPage));
+
+					});
+
 		});
-		//数字按钮
-		$(".panelBar ul li[class=\'nomal\'] a").bind("click",function(){
-			alert($(this).html());
-		});
-		
-		//下一页
-		$(".panelBar ul li[class=\'raquo\'] a").bind("click",function(){
-			alert('xia');
-		});
-	};
-	
-//	var P = new Page().CreatPageButton();
-	//var s = P.CreatPageButton();
-	$(".panelBar").html(new Page().CreatPageButton().join(""));
-	//注册分页按钮
-	new PageButtonOnclik();
-	
-	
-	
-	
-	
-	
-	
-	
-})(jQuery);

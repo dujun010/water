@@ -1,10 +1,11 @@
 package com.jsmd.teacher.service;
 
 
-import java.util.List;
+import org.mybatis.pagination.dto.PageMyBatis;
+import org.mybatis.pagination.dto.datatables.PagingCriteria;
 
 import com.jmsd.teacher.pojo.Teacher;
 
 public interface TeacherService {
-	List<Teacher> findAll();
+	public PageMyBatis<Teacher> queryListByPageFully(PagingCriteria pagingCriteria);
 }
