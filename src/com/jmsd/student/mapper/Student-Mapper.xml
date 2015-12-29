@@ -7,7 +7,7 @@
 	</sql>
     
     <!-- = 分页查询全部  = --> 
-    <select id="queryListByPageFully" resultType="com.jmsd.student.pojo.Student">
+    <select id="queryListByPageFully" resultType="Student">
     	SELECT <include refid="Base_Column_List"/> FROM student
     </select>
 </mapper>
