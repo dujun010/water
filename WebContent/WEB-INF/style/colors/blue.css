@@ -1,0 +1,40 @@
+a:hover {
+	color:#3497b8;
+}
+#infopage span, #contactpage span {
+	color:#3497b8;
+}
+.item p {
+	color:#3497b8;
+}
+
+#tray-button:hover {
+	background:#3497b8;
+}
+#progress-bar {
+    background: #3497b8;
+}
+.centered-controls a:hover {
+	background:#3497b8;
+}
+#social ul li:hover {
+	background:#3497b8;
+}
+
+.login {
+	  margin-left: 50px;
+		background-image: initial;
+    background-position-x: initial;
+    background-position-y: initial;
+    background-size: initial;
+    background-repeat-x: initial;
+    background-repeat-y: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: rgba(255, 255, 255, 0.0980392);
+}
+.login:hover {
+	background:#48afcf;
+
+}
