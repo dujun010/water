@@ -22,8 +22,7 @@
 
 	<!-- 对静态资源文件的访问    -->
 	<mvc:resources location="/WEB-INF/js/" mapping="/js/**" />
-	<mvc:resources location="/WEB-INF/style/css/" mapping="/style/css/**"/>
-	<mvc:resources location="/WEB-INF/style/image/" mapping="/style/image/**"/>
+	<mvc:resources location="/WEB-INF/style/" mapping="/style/**"/>
 
 	<!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
 	<bean id="mappingJacksonHttpMessageConverter"
