@@ -79,7 +79,7 @@
 		<!--dataSource属性指定要用到的连接池--> 
         <property name="dataSource" ref="dataSource"/>
         <!--configLocation属性指定mybatis的核心配置文件--> 
-		<property name="mapperLocations" value="classpath*:com/jmsd/**/*-Mapper.xml" />
+		<property name="mapperLocations" value="classpath*:com/jmsd/*/pojo/mapper/*-Mapper.xml" />
 		<property name="plugins">
             <list>
                 <ref bean="pageConfig"/>
@@ -92,8 +92,10 @@
     	basePackage 属性是让你为映射器接口文件设置基本的包路径。
     	 你可以使用分号或逗号 作为分隔符设置多于一个的包路径。每个映射器将会在指定的包路径中递归地被搜索到。
     -->
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.jmsd.student.mapper,com.jmsd.teacher.mapper"/>
+<!--         <property name="basePackage" value="com.jmsd.student.mapper,com.jmsd.teacher.mapper"/> -->
+		<property name="basePackage" value="com.jmsd.*.mapper" />
         <property name="sqlSessionFactory" ref="sqlSessionFactory" />
     </bean>
     
